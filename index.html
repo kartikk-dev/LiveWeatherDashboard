@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Check current weather conditions and a five-day forecast for cities around the world."
+  >
+  <meta name="theme-color" content="#f5f7fa">
+  <title>Weatherline | Live Weather Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="Weatherline home">
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="2.4"/>
+            <path
+              d="M16 3v4m0 18v4M3 16h4m18 0h4M6.8 6.8l2.9 2.9m12.6 12.6 2.9 2.9m0-18.4-2.9 2.9M9.7 22.3l-2.9 2.9"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
+        <span class="brand-name">Weatherline</span>
+      </a>
+
+      <div class="header-info">
+        <span class="live-indicator" aria-hidden="true"></span>
+        <span>Live weather data</span>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <section class="welcome-section" aria-labelledby="page-title">
+        <p class="eyebrow">YOUR DAILY WEATHER REPORT</p>
+
+        <h1 id="page-title">
+          The weather,<br>
+          <span>at a glance.</span>
+        </h1>
+
+        <p class="intro-text">
+          Find current conditions and the five-day outlook for any city.
+          Simple, reliable, and up to date.
+        </p>
+      </section>
+
+      <section class="search-section" aria-label="Search for a city">
+        <form id="weatherForm" class="search-form" role="search">
+          <label for="cityInput" class="visually-hidden">
+            Enter a city name
+          </label>
+
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="10.8"
+                cy="10.8"
+                r="6.8"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="m16 16 4.2 4.2"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+
+          <input
+            type="text"
+            id="cityInput"
+            name="city"
+            placeholder="Search a city, for example Pune"
+            autocomplete="off"
+            maxlength="80"
+            aria-describedby="statusMessage"
+            required
+          >
+
+          <button type="submit" id="searchButton">
+            <span>Search weather</span>
+          </button>
+        </form>
+
+        <p
+          id="statusMessage"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          Enter a city name to get started.
+        </p>
+      </section>
+
+      <section
+        id="currentWeather"
+        class="current-weather"
+        aria-labelledby="currentCityName"
+        hidden
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CURRENT CONDITIONS</p>
+            <h2 id="currentCityName">Your city</h2>
+            <p id="currentDate" class="current-date"></p>
+          </div>
+
+          <span class="location-label">CURRENT WEATHER</span>
+        </div>
+
+        <div class="current-weather-content">
+          <div class="temperature-block">
+            <div id="currentWeatherIcon" class="weather-icon" aria-hidden="true">
+            </div>
+
+            <div>
+              <p class="temperature">
+                <span id="currentTemperature">--</span><span>°C</span>
+              </p>
+              <p id="currentCondition" class="weather-condition">
+                Weather conditions
+              </p>
+            </div>
+          </div>
+
+          <div class="weather-details">
+            <article class="detail-item">
+              <span class="detail-label">Feels like</span>
+              <p class="detail-value">
+                <span id="feelsLike">--</span>°C
+              </p>
+            </article>
+
+            <article class="detail-item">
+              <span class="detail-label">Humidity</span>
+              <p class="detail-value">
+                <span id="humidity">--</span>%
+              </p>
+            </article>
+
+            <article class="detail-item">
+              <span class="detail-label">Wind speed</span>
+              <p class="detail-value">
+                <span id="windSpeed">--</span> km/h
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="forecastSection"
+        class="forecast-section"
+        aria-labelledby="forecastTitle"
+        hidden
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PLAN AHEAD</p>
+            <h2 id="forecastTitle">Five-day forecast</h2>
+          </div>
+
+          <span class="forecast-unit">Temperatures in °C</span>
+        </div>
+
+        <div
+          id="forecastGrid"
+          class="forecast-grid"
+          aria-label="Weather forecast for the next five days"
+        ></div>
+      </section>
+
+      <section class="empty-state" id="emptyState">
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <circle
+              cx="24"
+              cy="22"
+              r="10"
+              stroke="currentColor"
+              stroke-width="2.5"
+            />
+            <path
+              d="M24 5v5M24 34v5M7 22h5m24 0h5M12 10l4 4m16 16 4 4m0-24-4 4M16 30l-4 4"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M20 45c0-5 4-9 9-9 1-7 7-12 14-12 8 0 14 6 14 14 5 1 8 5 8 10 0 6-5 10-11 10H30c-6 0-10-5-10-10Z"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+
+        <h2>Your forecast starts here</h2>
+        <p>
+          Search for a city to see its current weather and the
+          next five days.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Weatherline · Live weather, made simple.</p>
+      <p>
+        Weather data provided by
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Open-Meteo</a>
+      </p>
+    </footer>
+  </div>
+</body>
+</html>
